@@ -1,15 +1,59 @@
-## Put comments here that give an overall description of what your
-## functions do
+# Overall, makeCacheMatrix() sustains cache data for resuing it.
+# cacheSolve() cacluates the inverse of a Matrix from Matrix or makeCachematrix().
+# to validate my won code, you can use the following seqeunces:
+# > m <- makeCacheMatrix()
+# > m$set(matrix(c(5,3,3,5),2,2))
+# > m$get()
+#        [,1] [,2]
+# [1,]    5    3
+# [2,]    3    5
+#
+# > cacheSolve(m)
+#         [,1]    [,2]
+# [1,]  0.3125 -0.1875
+# [2,] -0.1875  0.3125
+#
+# > cacheSolve(m)
+# getting cached data
+#         [,1]    [,2]
+# [1,]  0.3125 -0.1875
+# [2,] -0.1875  0.3125
 
-## Write a short comment describing this function
 
+# makeCacheMatrix: return a list of functions to:
+# 1. Set the value of the matrix
+# 2. Get the value of the matrix
+# 3. Set the value of the inverse
+# 4. Get the value of the inverse
 makeCacheMatrix <- function(x = matrix()) {
-
+    m <- NULL                                      
+    
+    set <- function(y) {
+        global_x <<- y 
+        global_m <<- NULL                                
+    }
+    
+    
+    get <- function() return(global_x)
+    set_global_m <- function(m) global_m <<- m    
+    get_global_m <- function() return(global_m)                       
+    list(set = set, get = get,
+         set_global_m = set_global_m,
+         get_global_m = get_global_m)
 }
 
-
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+# This function computes the inverse of matrix.
+# by checking previous history, this function avoids for redundancy.
+cacheSolve <- function(x) {
+    
+    m<- x$get_global_m()               
+    if(!is.null(m)) { 
+        message("getting cached data")
+        return(m)
+    }
+  
+    data <- x$get()               
+    inverseMatrix <- solve(data)   
+    x$set_global_m(inverseMatrix)             
+    return(inverseMatrix)                            
 }
