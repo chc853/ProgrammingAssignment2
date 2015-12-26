@@ -26,14 +26,15 @@
 # 3. Set the value of the inverse
 # 4. Get the value of the inverse
 makeCacheMatrix <- function(x = matrix()) {
+    ## Initialize m
     m <- NULL                                      
-    
+    ## Create a function which is to keep global_x and global_m
     set <- function(y) {
         global_x <<- y 
         global_m <<- NULL                                
     }
     
-    
+    # Create one line function().
     get <- function() return(global_x)
     set_global_m <- function(m) global_m <<- m    
     get_global_m <- function() return(global_m)                       
