@@ -46,13 +46,16 @@ makeCacheMatrix <- function(x = matrix()) {
 # This function computes the inverse of matrix.
 # by checking previous history, this function avoids for redundancy.
 cacheSolve <- function(x) {
-    
+    # try to get the value from the global environment.
     m<- x$get_global_m()               
     if(!is.null(m)) { 
+    # by checking if m is NULL, we can know whether this matrix was already computed or not.
+    # if so, return computed value in last time, then print the message.
         message("getting cached data")
         return(m)
     }
-  
+    # if m is NULL, the inverse of matrix is computed by solve() function.
+    # Then, this result should be stored in global value for reusing.
     data <- x$get()               
     inverseMatrix <- solve(data)   
     x$set_global_m(inverseMatrix)             
